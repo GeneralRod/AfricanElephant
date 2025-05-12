@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>African Elephant</title>
+  <style>
+    /* Reset and base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      max-height: 600px;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      user-select: none;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      max-width: 350px;
+      margin: 0 auto;
+      height: 100%;
+      line-height: 1.4;
+      padding: 0 12px 12px;
+    }
+    header {
+      background: linear-gradient(135deg, #4a7c59 0%, #8abf8f 100%);
+      color: white;
+      padding: 18px 12px 30px;
+      text-align: center;
+      border-radius: 0 0 30px 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      flex-shrink: 0;
+    }
+    header h1 {
+      font-size: 2rem;
+      margin: 0 0 8px;
+      letter-spacing: 2px;
+      line-height: 1.1;
+    }
+    header p {
+      font-size: 0.9rem;
+      font-style: italic;
+      margin: 0;
+      opacity: 0.9;
+      transition: opacity 0.3s ease;
+    }
+    /* Container for nav and main content side by side */
+    .content-container {
+      display: flex;
+      flex-grow: 1;
+      height: calc(100% - 120px);
+      gap: 10px;
+      overflow: hidden;
+    }
+    /* Navigation vertical on left side */
+    nav {
+      background: #4a7c59;
+      display: flex;
+      flex-direction: column;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(74,124,89,0.7);
+      flex-shrink: 0;
+      width: 90px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+    nav button {
+      background: transparent;
+      border: none;
+      color: #c8e6c9;
+      padding: 12px 8px;
+      font-weight: 600;
+      font-size: 0.83rem;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+      border-radius: 15px;
+      margin: 6px 8px;
+      user-select: none;
+      text-align: center;
+      white-space: nowrap;
+    }
+    nav button:hover {
+      background-color: #7ebf7f;
+      color: #fff;
+    }
+    nav button.active {
+      background-color: #31592e;
+      color: #fff;
+      cursor: default;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
+    }
+    nav::-webkit-scrollbar {
+      width: 6px;
+    }
+    nav::-webkit-scrollbar-thumb {
+      background-color: #31592e;
+      border-radius: 3px;
+    }
+    nav::-webkit-scrollbar-track {
+      background: #4a7c59;
+      border-radius: 3px;
+    }
+    main {
+      flex-grow: 1;
+      overflow-y: auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 6px 10px rgba(74,124,89,0.3);
+      padding: 16px 20px 20px;
+      scrollbar-width: thin;
+      scrollbar-color: #4a7c59 #e0e0e0;
+    }
+    main::-webkit-scrollbar {
+      width: 6px;
+    }
+    main::-webkit-scrollbar-thumb {
+      background-color: #4a7c59;
+      border-radius: 3px;
+    }
+    main::-webkit-scrollbar-track {
+      background: #e0e0e0;
+      border-radius: 3px;
+    }
+    section.page {
+      display: none;
+      outline: none;
+    }
+    section.page.active {
+      display: block;
+    }
+    section.page h2 {
+      font-size: 1.35rem;
+      margin-bottom: 12px;
+      color: #3b5d3b;
+      user-select: text;
+    }
+    section.page img {
+      width: 100%;
+      height: auto;
+      max-height: 160px;
+      object-fit: contain;
+      border-radius: 15px;
+      margin-bottom: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+      display: block;
+      user-select: none;
+    }
+    section.page p {
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      color: #444;
+      user-select: text;
+    }
+    ul {
+      padding-left: 20px;
+      margin: 8px 0 0;
+      color: #444;
+      user-select: text;
+    }
+    ul li {
+      margin-bottom: 5px;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #666;
+      padding-top: 10px;
+      border-top: 1px solid #ddd;
+      user-select: none;
+      flex-shrink: 0;
+      margin-top: 8px;
+    }
+    footer a {
+      color: #4a7c59;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+    /* Responsive adjustments */
+    @media (max-width: 375px) {
+      .content-container {
+        flex-direction: column;
+        height: auto;
+      }
+      nav {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        border-radius: 15px 15px 0 0;
+        box-shadow: 0 4px 8px rgba(74,124,89,0.7);
+        margin-bottom: 10px;
+      }
+      nav button {
+        margin: 6px 8px;
+        flex-shrink: 0;
+      }
+      main {
+        height: 380px;
+      }
+    }
+
+    /* Memory Game Styles */
+    .memory-game {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 10px;
+      user-select: none;
+    }
+    .memory-card {
+      background: #4a7c59;
+      border-radius: 15px;
+      height: 70px;
+      position: relative;
+      cursor: pointer;
+      perspective: 1000px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    .memory-card.flip .front {
+      transform: rotateY(0deg);
+      opacity: 1;
+      z-index: 2;
+    }
+    .memory-card.flip .back {
+      transform: rotateY(180deg);
+      opacity: 0;
+      z-index: 1;
+    }
+    .front, .back {
+      border-radius: 15px;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+    }
+    .front {
+      background: #30502a;
+      transform: rotateY(180deg);
+      opacity: 0;
+      z-index: 1;
+    }
+    .back {
+      background: #4a7c59;
+      cursor: pointer;
+      z-index: 2;
+    }
+    /* Message box under memory game */
+    .game-message {
+      margin-top: 15px;
+      font-weight: 600;
+      text-align: center;
+      color: #31592e;
+      min-height: 1.25rem;
+      user-select: text;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>African Elephant</h1>
+    <p id="pageSubtitle">The Gentle Giant of the Savanna</p>
+  </header>
+  <div class="content-container">
+    <nav aria-label="Site navigation">
+      <button class="active" data-page="about" aria-current="page" type="button">About</button>
+      <button data-page="habitat" type="button">Habitat</button>
+      <button data-page="diet" type="button">Diet</button>
+      <button data-page="behavior" type="button">Behavior</button>
+      <button data-page="population" type="button">Population & Lifespan</button>
+      <button data-page="facts" type="button">Facts</button>
+      <button data-page="conservation" type="button">Conservation</button>
+      <button data-page="memorygame" type="button">Memory Game</button>
+    </nav>
+    <main tabindex="0">
+      <section id="about" class="page active" aria-label="About the African Elephant" tabindex="0">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/63/African_elephant_warning_raised_trunk.jpg" alt="African Elephant" />
+        <h2>About the African Elephant</h2>
+        <p>The African elephant (<em>Loxodonta africana</em>) is the largest land animal on Earth, native to various habitats across Africa including savannas, forests, and deserts.</p>
+        <p>Known for their distinctive large ears which help regulate body temperature, these majestic creatures play a crucial role in their ecosystems.</p>
+      </section>
+      <section id="habitat" class="page" aria-label="Habitat of the African Elephant" tabindex="0">
+        <h2>Habitat</h2>
+        <p>African elephants inhabit diverse environments including savannas, forests, deserts, and marshes across sub-Saharan Africa.</p>
+        <p>They require large areas with access to water sources and sufficient vegetation for food.</p>
+      </section>
+      <section id="diet" class="page" aria-label="Diet of the African Elephant" tabindex="0">
+        <h2>Diet</h2>
+        <p>African elephants are herbivores that consume grasses, leaves, fruits, bark, and roots.</p>
+        <p>An adult can eat up to 150 kg (330 lbs) of vegetation daily and drink up to 200 liters of water!</p>
+      </section>
+      <section id="behavior" class="page" aria-label="Behavior of the African Elephant" tabindex="0">
+        <h2>Behavior</h2>
+        <p>These intelligent animals live in matriarchal herds, showing strong social bonds and cooperative behavior.</p>
+        <p>Elephants communicate through vocalizations, physical touch, and infrasonic sounds that travel long distances.</p>
+      </section>
+      <section id="population" class="page" aria-label="Population and Lifespan of the African Elephant" tabindex="0">
+        <h2>Population & Lifespan</h2>
+        <p>Current estimates suggest there are between 415,000 and 500,000 African elephants in the wild as of recent surveys, although populations can vary regionally.</p>
+        <p><strong>Lifespan in the wild:</strong> African elephants typically live 60 to 70 years.</p>
+        <p><strong>Lifespan in captivity:</strong> In zoos or reserves, with veterinary care, they can live up to around 70 years or sometimes slightly longer.</p>
+      </section>
+      <section id="facts" class="page" aria-label="Interesting Facts about the African Elephant" tabindex="0">
+        <h2>Interesting Facts</h2>
+        <ul>
+          <li>Adult males can weigh up to 6,000 kg (13,200 lbs).</li>
+          <li>African elephants have a highly developed brain and display complex behaviors such as grief, learning, and play.</li>
+          <li>They live in tight family groups led by a matriarch (an older female elephant).</li>
+          <li>Elephants communicate using infrasound, sounds lower than humans can hear, which travel several kilometers.</li>
+          <li>The trunk contains over 40,000 muscles, used for breathing, smelling, touching, grasping, and producing sounds.</li>
+        </ul>
+      </section>
+      <section id="conservation" class="page" aria-label="Conservation Status of the African Elephant" tabindex="0">
+        <h2>Conservation Status</h2>
+        <p>African elephants face challenges from habitat loss and poaching for ivory. They are classified as vulnerable by the IUCN.</p>
+        <p>Multiple conservation efforts across Africa strive to protect these incredible animals and their habitats for future generations.</p>
+      </section>
+      <section id="memorygame" class="page" aria-label="Elephant Memory Game" tabindex="0">
+        <h2>Elephant Memory Game</h2>
+        <p>Match the pairs of elephant cards. Click or tap to flip!</p>
+        <div class="memory-game" aria-live="polite" aria-atomic="true" aria-relevant="additions"></div>
+        <div class="game-message" aria-live="polite" aria-atomic="true"></div>
+      </section>
+    </main>
+  </div>
+  <footer>
+    &copy; 2024 African Elephant Info &nbsp;|&nbsp;
+    <a href="https://en.wikipedia.org/wiki/African_elephant" target="_blank" rel="noopener noreferrer">Wikipedia</a>
+  </footer>
+  <script>
+    // Navigation handler
+    const navButtons = document.querySelectorAll('nav button');
+    const pages = document.querySelectorAll('section.page');
+    const subtitle = document.getElementById('pageSubtitle');
+
+    const subtitles = {
+      about: 'The Gentle Giant of the Savanna',
+      habitat: 'Diverse environments across Africa',
+      diet: 'What African elephants eat daily',
+      behavior: 'Social and intelligent behaviors',
+      population: 'Population and lifespan details',
+      facts: 'Fascinating facts about African elephants',
+      conservation: 'Protecting the African Elephant',
+      memorygame: 'Fun Elephant Memory Game'
+    };
+
+    navButtons.forEach(button => {
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        if(button.classList.contains('active')) return;
+
+        navButtons.forEach(btn => {
+          btn.classList.remove('active');
+          btn.removeAttribute('aria-current');
+        });
+        pages.forEach(page => page.classList.remove('active'));
+
+        button.classList.add('active');
+        button.setAttribute('aria-current', 'page');
+
+        const pageToShow = document.getElementById(button.dataset.page);
+        if(pageToShow) {
+          pageToShow.classList.add('active');
+          subtitle.textContent = subtitles[button.dataset.page] || '';
+        }
+      });
+    });
+
+    // Memory game logic
+    const gameContainer = document.querySelector('.memory-game');
+    const messageBox = document.querySelector('.game-message');
+    // Array of elephant emojis pairs for simplicity; could use images or icons
+    const cardSymbols = ['🐘', '🐘', '🌿', '🌿', '💧', '💧', '🌍', '🌍'];
+
+    let hasFlippedCard = false;
+    let lockBoard = false;
+    let firstCard, secondCard;
+    let matches = 0;
+
+    function shuffle(array) {
+      for(let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function createCard(symbol, index) {
+      const card = document.createElement('div');
+      card.classList.add('memory-card');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-label', 'Memory card');
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-pressed', 'false');
+      card.dataset.symbol = symbol;
+
+      const front = document.createElement('div');
+      front.classList.add('front');
+      front.textContent = symbol;
+
+      const back = document.createElement('div');
+      back.classList.add('back');
+      back.innerHTML = '&#127799;'; // Palm leaf emoji as back
+
+      card.appendChild(front);
+      card.appendChild(back);
+
+      // For accessibility keyboard control
+      card.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          flipCard(card);
+        }
+      });
+      card.addEventListener('click', () => flipCard(card));
+      return card;
+    }
+
+    function flipCard(card) {
+      if(lockBoard || card === firstCard || card.classList.contains('flip')) return;
+
+      card.classList.add('flip');
+      card.setAttribute('aria-pressed','true');
+
+      if(!hasFlippedCard) {
+        hasFlippedCard = true;
+        firstCard = card;
+        return;
+      }
+      secondCard = card;
+      checkForMatch();
+    }
+
+    function checkForMatch() {
+      const isMatch = firstCard.dataset.symbol === secondCard.dataset.symbol;
+      isMatch ? disableCards() : unflipCards();
+    }
+
+    function disableCards() {
+      firstCard.removeEventListener('click', flipCard);
+      secondCard.removeEventListener('click', flipCard);
+      matches += 1;
+      resetBoard();
+      if(matches === cardSymbols.length / 2) {
+        messageBox.textContent = '🎉 Congratulations! You matched all cards!';
+      } else {
+        messageBox.textContent = `Great! ${matches} match${matches > 1 ? 'es' : ''} found.`;
+      }
+    }
+
+    function unflipCards() {
+      lockBoard = true;
+      setTimeout(() => {
+        firstCard.classList.remove('flip');
+        secondCard.classList.remove('flip');
+        firstCard.setAttribute('aria-pressed','false');
+        secondCard.setAttribute('aria-pressed','false');
+        resetBoard();
+      }, 1200);
+    }
+
+    function resetBoard() {
+      [hasFlippedCard, lockBoard] = [false, false];
+      [firstCard, secondCard] = [null, null];
+    }
+
+    function initGame() {
+      matches = 0;
+      messageBox.textContent = '';
+      gameContainer.innerHTML = '';
+      const shuffled = shuffle([...cardSymbols]);
+      shuffled.forEach((symbol, idx) => {
+        const card = createCard(symbol, idx);
+        gameContainer.appendChild(card);
+      });
+    }
+
+    // Initialize game on load
+    initGame();
+
+    // Reset game when user navigates to Memory Game page
+    navButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        if(button.dataset.page === 'memorygame') {
+          initGame();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
